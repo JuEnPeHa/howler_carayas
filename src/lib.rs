@@ -4,7 +4,7 @@ use near_sdk::{env, near_bindgen, assert_one_yocto, ext_contract, AccountId, Bal
     Gas, PanicOnDefault, Promise, CryptoHash, BorshStorageKey, PromiseOrValue, promise_result_as_success, require};
 use near_sdk::collections::{LookupMap, UnorderedMap, LazyOption, UnorderedSet};
 use std::collections::HashMap;
-use near_sdk::json_types::{Base64VecU8, U128};
+use near_sdk::json_types::{Base64VecU8, U128, U64};
 use near_sdk::serde::{Deserialize, Serialize};
 
 use crate::internal::*;
@@ -14,6 +14,7 @@ pub use crate::nft_core::*;
 pub use crate::approval::*;
 pub use crate::royalty::*;
 pub use crate::events::*;
+pub use crate::views::*;
 
 mod internal;
 mod approval; 
@@ -23,9 +24,11 @@ mod mint;
 mod nft_core; 
 mod royalty; 
 mod events;
+mod views;
 
 pub const NFT_METADATA_SPEC: &str = "1.0.0";
 pub const NFT_STANDARD_NAME: &str = "nep171";
+pub const DELIMITER: &str = ":";
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
@@ -39,7 +42,7 @@ pub struct Contract {
     pub minted: UnorderedMap<u64, Token>,
 }
 
-#[derive(BorshSerialize)]
+#[derive(BorshSerialize, BorshStorageKey)]
 pub enum StorageKey {
     TokensPerOwner,
     TokenPerOwnerInner { account_id_hash: CryptoHash },

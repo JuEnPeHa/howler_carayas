@@ -48,13 +48,13 @@ impl Contract {
         };
 
         //insert the token ID and token struct and make sure that the token doesn't exist
-        assert!(
+        require!(
             self.tokens_by_id.insert(&token_id_str, &token).is_none(),
             "Token already exists"
         );
 
         let metadata = TokenMetadata {
-            title: Some("JEPH NFT Contract".to_string()),
+            title: Some("Howler NFT Contract".to_string()),
             description: Some(description),
             media: Some("https://gateway.pinata.cloud/ipfs/QmTJcDggLZEAYckUaPefTCdJzfL8eNBGvQTxiXyDbpfYvj".to_string()),
             media_hash: None,
