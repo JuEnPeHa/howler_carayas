@@ -12,11 +12,11 @@ impl Contract {
         //perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
         let receiver_id = env::signer_account_id();
-        let mut token_id = 0 as u64;
+        let mut token_id = 0 as u16;
         if self.minted.is_empty() {
             token_id = 0;
         } else {
-            token_id = self.minted.len() as u64;
+            token_id = self.minted.len() as u16;
         }
 
         let mut description = "Hey, you have a new token! ".to_string();

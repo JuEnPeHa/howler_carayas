@@ -39,7 +39,7 @@ pub struct Contract {
     pub token_metadata_by_id: UnorderedMap<TokenId, TokenMetadata>,
     pub metadata: LazyOption<NFTContractMetadata>,
     pub records: UnorderedMap<AccountId, String>,
-    pub minted: UnorderedMap<u64, Token>,
+    pub minted: UnorderedMap<u16, Token>,
 }
 
 #[derive(BorshSerialize, BorshStorageKey)]
