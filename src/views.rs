@@ -6,7 +6,7 @@ pub trait SaleViews {
     fn get_token_by_id(&self, id: u16) -> Token;
     fn get_account_and_current_block(&self) -> (AccountId, U64);
     fn get_current_block(&self) -> U64;
-    fn set_sold_id(&mut self, id: U64);
+    fn set_sold_id(&mut self, id: u16);
 }
 
 #[near_bindgen]
@@ -31,7 +31,8 @@ impl SaleViews for Contract {
         U64(env::block_height())
     }
 
-    fn set_sold_id(&mut self, id:U64) {
+    #[private]
+    fn set_sold_id(&mut self, id:u16) {
       
     }
 }

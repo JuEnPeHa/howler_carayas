@@ -5,35 +5,37 @@ impl Contract {
     #[payable]
     pub fn nft_mint(
         &mut self,
-        //token_id: TokenId,
+        token_id: u16,
+        media: String,
         //metadata: TokenMetadata,
         //receiver_id: AccountId,
         //we add an optional parameter for perpetual royalties
         //perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
-        let receiver_id = env::signer_account_id();
-        let mut token_id = 0 as u16;
-        if self.minted.is_empty() {
-            token_id = 0;
-        } else {
-            token_id = self.minted.len() as u16;
-        }
+        let receiver_id: AccountId = env::signer_account_id();
+        // let mut token_id = 0 as u16;
+        // if self.minted.is_empty() {
+        //     token_id = 0;
+        // } else {
+        //     token_id = self.minted.len() as u16;
+        // }
 
-        let mut description = "Hey, you have a new token! ".to_string();
-        let description_account = env::signer_account_id().to_string();
-        let description_space = " and is the number ".to_string();
-        let description_token = token_id.to_string();
+        let mut description: String = "Hey, you have a new token! ".to_string();
+        let description_account: String = env::signer_account_id().to_string();
+        let description_space: String = " and is the number ".to_string();
+        let description_token: String = token_id.to_string();
         description.push_str(&description_account);
         description.push_str(&description_space);
         description.push_str(&description_token);
+        let extra: String = token_id.clone().to_string();
 
-        let token_id_str = token_id.clone().to_string();
+        let token_id_str: String = token_id.clone().to_string();
  
         //measure the initial storage being used on the contract
         let initial_storage_usage = env::storage_usage();
 
         // create a royalty map to store in the token
-        let royalty = HashMap::new();
+        let royalty: HashMap<AccountId, u32> = HashMap::new();
 
         //specify the token struct that contains the owner ID 
         let token = Token {
@@ -56,7 +58,7 @@ impl Contract {
         let metadata = TokenMetadata {
             title: Some("Howler NFT Contract".to_string()),
             description: Some(description),
-            media: Some("https://gateway.pinata.cloud/ipfs/QmTJcDggLZEAYckUaPefTCdJzfL8eNBGvQTxiXyDbpfYvj".to_string()),
+            media: Some(media/*"https://gateway.pinata.cloud/ipfs/QmTJcDggLZEAYckUaPefTCdJzfL8eNBGvQTxiXyDbpfYvj".to_string()*/),
             media_hash: None,
             reference: None,
             reference_hash: None,
@@ -65,7 +67,7 @@ impl Contract {
             expires_at: None,
             starts_at: None,
             updated_at: None,
-            extra: None,
+            extra: Some(serde_json::json!({"extra": extra}).to_string()),
         };
 
         //insert the token ID and metadata
